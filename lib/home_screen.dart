@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shayari_posting/Constants/ColorConstants.dart';
 import 'package:shayari_posting/Constants/utils.dart';
+import 'package:shayari_posting/Controller.dart/categories_controller.dart';
 import 'package:shayari_posting/Controller.dart/home_controller.dart';
 import 'package:shayari_posting/drawer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -17,6 +18,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
     final List<String> tabTitles = ['Categories', 'Pictures', 'Posts'];
+    final TextEditingController searchController = TextEditingController();
+    CategoriesController categoriesController = Get.put(CategoriesController());
+
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
@@ -26,9 +30,13 @@ class HomeScreen extends StatelessWidget {
         title: Obx(() {
           switch (homeController.selectedIndex.value) {
             case 0:
-              return const TextField(
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
+              return TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  categoriesController.filterCategories(value);
+                },
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
                   hintText: 'Search',
                   contentPadding: EdgeInsets.zero,
                   hintStyle: TextStyle(color: Colors.white),

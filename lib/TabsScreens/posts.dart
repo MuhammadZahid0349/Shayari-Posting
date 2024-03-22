@@ -57,7 +57,7 @@ class PostScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => const UploadPostScreen());
+                    Get.to(() => UploadPostScreen());
                   },
                   child: Container(
                     decoration: BoxDecoration(

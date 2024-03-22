@@ -115,14 +115,14 @@ class ShayariListScreen extends StatelessWidget {
                         10.w.widthBox,
                         GestureDetector(
                           onTap: () {
-                            categoriesController.isFavorite.toggle();
+                            categoriesController.isFavoriteImg.toggle();
                           },
                           child: Obx(() => Icon(
-                                categoriesController.isFavorite.isTrue
+                                categoriesController.isFavoriteImg.isTrue
                                     ? Icons.favorite
                                     : Icons.favorite_border,
                                 size: 26.sp,
-                                color: categoriesController.isFavorite.isTrue
+                                color: categoriesController.isFavoriteImg.isTrue
                                     ? Colors.red
                                     : Colors.black,
                               )),
@@ -182,14 +182,14 @@ class ShayariListScreen extends StatelessWidget {
                         10.w.widthBox,
                         GestureDetector(
                           onTap: () {
-                            categoriesController.isFavorite.toggle();
+                            categoriesController.isFavoriteTxt.toggle();
                           },
                           child: Obx(() => Icon(
-                                categoriesController.isFavorite.isTrue
+                                categoriesController.isFavoriteTxt.isTrue
                                     ? Icons.favorite
                                     : Icons.favorite_border,
                                 size: 26.sp,
-                                color: categoriesController.isFavorite.isTrue
+                                color: categoriesController.isFavoriteTxt.isTrue
                                     ? Colors.red
                                     : Colors.black,
                               )),

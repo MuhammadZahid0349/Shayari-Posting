@@ -18,7 +18,7 @@ class CategoriesScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Obx(
             () => ListView.builder(
-              itemCount: categoriesController.categoriesShayari.length,
+              itemCount: categoriesController.filteredCategories.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {

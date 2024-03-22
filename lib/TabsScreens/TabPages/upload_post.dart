@@ -2,33 +2,18 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:shayari_posting/Constants/ColorConstants.dart';
 import 'package:shayari_posting/Constants/utils.dart';
+import 'package:shayari_posting/Controller.dart/categories_controller.dart';
+import 'package:shayari_posting/Controller.dart/uplaod_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class UploadPostScreen extends StatefulWidget {
-  const UploadPostScreen({super.key});
+class UploadPostScreen extends StatelessWidget {
+  UploadPostScreen({super.key});
 
-  @override
-  State<UploadPostScreen> createState() => _UploadPostScreenState();
-}
-
-class _UploadPostScreenState extends State<UploadPostScreen> {
-  final TextEditingController _textController = TextEditingController();
-
-  var categoriesShayari = [
-    'Sad Shayari',
-    'Love Shayari',
-    'Pyar Shayari',
-    'Dosti Shayari',
-    'Dard Shayari',
-    'Independence Day Shayari',
-    'Romantic Shayari',
-  ];
-
-  bool showPostDetails = false;
-
-  String selectedCategory = 'Sad Shayari'; // Set to the first item in the list
+  CategoriesController categoriesController = Get.put(CategoriesController());
+  UploadPostController uploadPostController = Get.put(UploadPostController());
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +38,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                 child: GestureDetector(
                   onTap: () async {
                     final value = await FlutterClipboard.paste();
-                    setState(() {
-                      _textController.text = value;
-                    });
+                    uploadPostController.textController.text = value;
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,14 +78,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                         fontSize: 14.sp,
                         height: 1.5),
                     textAlignVertical: TextAlignVertical.center,
-                    controller: _textController,
-                    decoration: InputDecoration(
+                    controller: uploadPostController.textController,
+                    decoration: const InputDecoration(
                         isDense: true,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         contentPadding: EdgeInsets.all(10),
                         hintText: "Post...",
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Colors.grey),
                         border: InputBorder.none),
                   ),
                 ),
@@ -111,9 +94,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: GestureDetector(
-                  onTap: () {
-                    _textController.clear();
-                  },
+                  onTap: uploadPostController.clearText,
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: CustomizedText(
@@ -131,20 +112,22 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                   size: 12.sp,
                   FontWeight: FontWeight.w700),
               Center(
-                child: DropdownButton<String>(
-                  value: selectedCategory,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCategory = newValue!;
-                    });
-                  },
-                  items: categoriesShayari.map((String category) {
-                    return DropdownMenuItem<String>(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
-                ),
+                child: Obx(() => DropdownButton<String>(
+                      value: uploadPostController.selectedCategory.value,
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          uploadPostController.selectedCategory.value =
+                              newValue;
+                        }
+                      },
+                      items: categoriesController.categoriesShayari
+                          .map((String category) {
+                        return DropdownMenuItem<String>(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
+                    )),
               ),
               const Divider(),
               Center(
@@ -152,27 +135,17 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                   width: 220.w,
                   child: CustomziedButton(
                     text: "Post",
-                    onFunction: () {
-                      try {
-                        if (_textController.text.isNotEmpty) {
-                          setState(() {
-                            showPostDetails = true;
-                          });
-                        } else {
-                          throw Exception("Post text is empty");
-                        }
-                      } catch (e) {
-                        CustomizedSnackBar("Error", e.toString());
-                      }
-                    },
+                    onFunction: uploadPostController.post,
                   ),
                 ),
               ),
               const Divider(),
+              Obx(() => uploadPostController.showPostDetails.value
+                  ?
 
-              //show the all details of post after click on post _textcontroller and category name etc
-              showPostDetails == true
-                  ? Column(
+                  //show the all details of post after click on post _textcontroller and category name etc
+
+                  Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
@@ -185,7 +158,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                           child: Column(
                             children: [
                               CustomizedText(
-                                text: selectedCategory,
+                                text:
+                                    uploadPostController.selectedCategory.value,
                                 size: 11.sp,
                                 FontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -197,7 +171,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                                     20.r,
                                   )),
                                   child: CustomizedText(
-                                      text: "'${_textController.text}'",
+                                      text:
+                                          "'${uploadPostController.textController.text}'",
                                       size: 15.sp,
                                       color: Colors.black,
                                       FontWeight: FontWeight.w600)),
@@ -224,7 +199,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                         )
                       ],
                     )
-                  : const SizedBox(),
+                  : const SizedBox()),
               50.h.heightBox,
             ],
           ),
