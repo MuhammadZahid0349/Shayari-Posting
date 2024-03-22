@@ -33,7 +33,7 @@ class _PictureScreenState extends State<PictureScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8.0, // Adjust the spacing as needed
             mainAxisSpacing: 8.0, // Adjust the spacing as needed
@@ -53,10 +53,10 @@ class _PictureScreenState extends State<PictureScreen> {
                 child: CachedNetworkImage(
                   imageUrl: imageAddress[index],
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Center(
+                  placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             );

@@ -44,22 +44,22 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           ListTile(
             title: Text('Pictures'),
-            leading: Icon(Icons.logout),
+            leading: Icon(Icons.photo),
             onTap: () {},
           ),
           ListTile(
             title: Text('Categories'),
-            leading: Icon(Icons.logout),
+            leading: Icon(Icons.category),
             onTap: () {},
           ),
           ListTile(
             title: Text('Notifications'),
-            leading: Icon(Icons.logout),
+            leading: Icon(Icons.notification_add),
             onTap: () {},
           ),
           ListTile(
             title: Text('Privacy Policy'),
-            leading: Icon(Icons.logout),
+            leading: Icon(Icons.privacy_tip),
             onTap: () {},
           ),
         ],

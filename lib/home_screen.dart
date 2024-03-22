@@ -3,44 +3,45 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shayari_posting/Constants/ColorConstants.dart';
 import 'package:shayari_posting/Constants/utils.dart';
+import 'package:shayari_posting/Controller.dart/home_controller.dart';
 import 'package:shayari_posting/drawer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'TabsScreens/categories.dart';
 import 'TabsScreens/pictures.dart';
 import 'TabsScreens/posts.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    HomeController homeController = Get.put(HomeController());
+    final List<String> tabTitles = ['Categories', 'Pictures', 'Posts'];
     return Scaffold(
       drawer: DrawerPage(),
       appBar: AppBar(
         backgroundColor: logoColor,
         elevation: 0,
-        title: const TextField(
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: 'Search',
-            contentPadding: EdgeInsets.zero,
-            hintStyle: TextStyle(color: Colors.white),
-          ),
-        ),
+        centerTitle: true,
+        title: Obx(() {
+          switch (homeController.selectedIndex.value) {
+            case 0:
+              return const TextField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+              );
+            case 1:
+              return const Text('Pictures');
+            case 2:
+              return const Text('Posts');
+            default:
+              return const Text('Unknown');
+          }
+        }),
         actions: [
           Icon(
             Icons.notifications,
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
                   // Handle update profile
                 }
               },
-              itemBuilder: (BuildContext context) => [
+              itemBuilder: (BuildContext context) => const [
                 PopupMenuItem<String>(
                   value: 'logout',
                   child: Text('Logout'),
@@ -73,12 +74,12 @@ class _HomeScreenState extends State<HomeScreen>
                   child: Text('Update Profile'),
                 ),
               ],
-              child: Icon(Icons.more_vert),
+              child: const Icon(Icons.more_vert),
             ),
           )
         ],
         bottom: TabBar(
-          controller: _tabController,
+          controller: homeController.tabController,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(color: white),
@@ -94,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
       body: TabBarView(
-        controller: _tabController,
+        controller: homeController.tabController,
         children: [
           CategoriesScreen(),
           PictureScreen(),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -56,7 +57,7 @@ class PostScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(18.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => UploadPostScreen());
+                    Get.to(() => const UploadPostScreen());
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -75,7 +76,7 @@ class PostScreen extends StatelessWidget {
               SizedBox(
                 height: 500.h,
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 8.0, // Adjust the spacing as needed
                     mainAxisSpacing: 8.0, // Adjust the spacing as needed
@@ -94,9 +95,14 @@ class PostScreen extends StatelessWidget {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.r), //
-                          child: Image.network(
-                            imageAddress[index],
+                          child: CachedNetworkImage(
+                            imageUrl: imageAddress[index],
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
                         ),
                       ),
